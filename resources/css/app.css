@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables for Dynamic Theme Switching */
+:root {
+    --obsidian-dark: #0f172a;       /* Slate-900 */
+    --obsidian-card: #1e293b;       /* Slate-800 */
+    --obsidian-light: #334155;      /* Slate-700 */
+    --obsidian-default: #334155;    /* Slate-700 */
+    
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;      /* Slate-400 */
+    --text-muted: #64748b;          /* Slate-500 */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(0, 0, 0, 0.4);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-text: #ffffff;
+    --card-glow-color: rgba(138, 43, 226, 0.2);
+    --card-glow-active-color: rgba(138, 43, 226, 0.4);
+}
+
+html.light {
+    --obsidian-dark: #f8fafc;       /* Slate-50 */
+    --obsidian-card: #ffffff;       /* Pure White */
+    --obsidian-light: #e2e8f0;      /* Slate-200 */
+    --obsidian-default: #cbd5e1;    /* Slate-300 */
+    
+    --text-primary: #0f172a;        /* Slate-900 */
+    --text-secondary: #475569;      /* Slate-600 */
+    --text-muted: #64748b;          /* Slate-500 */
+    --border-color: rgba(0, 0, 0, 0.08);
+    --input-bg: rgba(241, 245, 249, 0.8); /* Light Slate-100 */
+    --input-border: rgba(0, 0, 0, 0.15);
+    --input-text: #0f172a;
+    --card-glow-color: rgba(69, 243, 255, 0.1);
+    --card-glow-active-color: rgba(69, 243, 255, 0.2);
+}
+
+/* Base body background override */
+body {
+    background-color: var(--obsidian-dark) !important;
+}
+
+/* Light Mode Overrides */
+html.light body {
+    color: var(--text-primary);
+}
+
+/* Text overrides in Light Mode */
+html.light .text-white {
+    color: var(--text-primary) !important;
+}
+html.light .text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+html.light .text-slate-300 {
+    color: var(--text-secondary) !important;
+}
+html.light .text-slate-400 {
+    color: var(--text-secondary) !important;
+}
+html.light .text-gray-400 {
+    color: var(--text-secondary) !important;
+}
+html.light .text-gray-500 {
+    color: var(--text-muted) !important;
+}
+html.light .text-slate-500 {
+    color: var(--text-muted) !important;
+}
+html.light .text-obsidian-dark {
+    color: #0f172a !important; /* Keep buttons and badges dark */
+}
+
+/* Input and Form Overrides */
+html.light .bg-black\/40 {
+    background-color: var(--input-bg) !important;
+}
+html.light .bg-black\/70 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+html.light .text-white-input {
+    color: var(--text-primary) !important;
+}
+
+/* Border overrides */
+html.light .border-white\/5 {
+    border-color: var(--border-color) !important;
+}
+html.light .border-white\/10 {
+    border-color: var(--border-color) !important;
+}
+html.light .border-white\/20 {
+    border-color: var(--border-color) !important;
+}
+
+/* Interactive dashboard links/elements overrides */
+html.light .hover\:text-white:hover {
+    color: #0f172a !important;
+}
+html.light .hover\:border-neon-blue\/30:hover {
+    border-color: rgba(69, 243, 255, 0.6) !important;
+}
+
+/* welcome.blade.php section overlays */
+html.light .bg-black\/30 {
+    background-color: #f1f5f9 !important; /* Slate-100 */
+}
+html.light .bg-black\/60 {
+    background-color: rgba(255, 255, 255, 0.8) !important; /* White with transparency */
+}
+html.light .bg-white\/5 {
+    background-color: #e2e8f0 !important; /* Slate-200 */
+}
+html.light .bg-white\/10 {
+    background-color: #e2e8f0 !important; /* Slate-200 */
+}
+
+/* Show/hide theme toggle icons */
+html.light .html-light-sun {
+    display: block !important;
+}
+html.light .html-dark-moon {
+    display: none !important;
+}
+html:not(.light) .html-light-sun {
+    display: none !important;
+}
+html:not(.light) .html-dark-moon {
+    display: block !important;
+}
