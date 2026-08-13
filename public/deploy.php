@@ -87,6 +87,28 @@ if (file_exists($env_path)) {
     }
 }
 
+// Step 2.5: Ensure SQLite database file exists if DB_CONNECTION=sqlite
+if (file_exists($env_path)) {
+    $env_contents = file_get_contents($env_path);
+    if (preg_match('/^DB_CONNECTION=sqlite/m', $env_contents)) {
+        $db_path = $project_root . '/database/database.sqlite';
+        if (!file_exists($db_path)) {
+            echo "<span class='info'>[INFO] SQLite database file not found. Creating it...</span>\n";
+            if (!is_dir(dirname($db_path))) {
+                mkdir(dirname($db_path), 0755, true);
+            }
+            if (touch($db_path)) {
+                chmod($db_path, 0666); // Make sure it's writable
+                echo "<span class='success'>[SUCCESS] Created SQLite database file.</span>\n\n";
+            } else {
+                echo "<span class='error'>[ERROR] Failed to create SQLite database file.</span>\n\n";
+            }
+        } else {
+            echo "<span class='info'>[INFO] SQLite database file already exists.</span>\n\n";
+        }
+    }
+}
+
 // Step 3: Clear Configuration Caches Natively
 // When Laravel is cached, it ignores .env modifications. Deleting these cached files forces a rebuild.
 echo "<span class='info'>[INFO] Clearing configuration and route caches natively...</span>\n";
