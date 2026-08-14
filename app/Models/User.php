@@ -178,5 +178,53 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->status === 'active';
     }
+
+    /*
+     * Admin & RBAC Roles
+     */
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->roles()->where('name', 'super_admin')->exists();
+    }
+
+    /*
+     * Subscriptions & Payments
+     */
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function featureOverrides(): HasMany
+    {
+        return $this->hasMany(UserFeatureOverride::class);
+    }
+
+    public function hasContractsAccess(): bool
+    {
+        return \App\Services\FeatureEntitlementService::check($this, 'contracts');
+    }
+
+    public function hasDomainsAccess(): bool
+    {
+        return \App\Services\FeatureEntitlementService::check($this, 'domains');
+    }
+
+    public function hasSkillsAccess(): bool
+    {
+        return \App\Services\FeatureEntitlementService::check($this, 'skills');
+    }
 }
 

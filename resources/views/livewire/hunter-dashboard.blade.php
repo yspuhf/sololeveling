@@ -272,17 +272,17 @@ new class extends Component {
         $contractsStart = $this->user->contracts_trial_started_at ? Carbon::parse($this->user->contracts_trial_started_at)->startOfDay() : $now;
         $contractsElapsed = (int) abs($now->diffInDays($contractsStart));
         $this->contractsDaysLeft = max(0, 7 - $contractsElapsed);
-        $this->contractsTrialExpired = ($contractsElapsed >= 7 && !$this->user->is_contracts_paid);
+        $this->contractsTrialExpired = ($contractsElapsed >= 7 && !$this->user->hasContractsAccess());
 
         $domainsStart = $this->user->domains_trial_started_at ? Carbon::parse($this->user->domains_trial_started_at)->startOfDay() : $now;
         $domainsElapsed = (int) abs($now->diffInDays($domainsStart));
         $this->domainsDaysLeft = max(0, 3 - $domainsElapsed);
-        $this->domainsTrialExpired = ($domainsElapsed >= 3 && !$this->user->is_domains_paid);
+        $this->domainsTrialExpired = ($domainsElapsed >= 3 && !$this->user->hasDomainsAccess());
 
         $skillsStart = $this->user->skills_trial_started_at ? Carbon::parse($this->user->skills_trial_started_at)->startOfDay() : $now;
         $skillsElapsed = (int) abs($now->diffInDays($skillsStart));
         $this->skillsDaysLeft = max(0, 3 - $skillsElapsed);
-        $this->skillsTrialExpired = ($skillsElapsed >= 3 && !$this->user->is_skills_paid);
+        $this->skillsTrialExpired = ($skillsElapsed >= 3 && !$this->user->hasSkillsAccess());
     }
 
     public function checkIn($contractId = null)
@@ -387,7 +387,7 @@ new class extends Component {
             return;
         }
 
-        if (!$this->user->is_contracts_paid && $this->newContractDuration != 7) {
+        if (!$this->user->hasContractsAccess() && $this->newContractDuration != 7) {
             session()->flash('error', 'Durations longer than 7 days require a National Rank upgrade (Rs 1).');
             return;
         }
@@ -1300,7 +1300,7 @@ new class extends Component {
                     </div>
 
                     <!-- Reward Projection -->
-                    @if ($this->user->is_contracts_paid || $newContractDuration == 7)
+                    @if ($this->user->hasContractsAccess() || $newContractDuration == 7)
                         <div class="bg-black/60 rounded-xl p-4 border border-white/5 space-y-1">
                             <div class="text-xs text-slate-400 font-title font-black tracking-widest">SYSTEM REWARD PROJECTION:</div>
                             <div class="text-neon-blue font-title font-bold text-xs">
@@ -1312,7 +1312,7 @@ new class extends Component {
                         </div>
                     @endif
 
-                    @if (!$this->user->is_contracts_paid && $newContractDuration != 7)
+                    @if (!$this->user->hasContractsAccess() && $newContractDuration != 7)
                         <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5 space-y-4 text-center">
                             <div class="text-xs text-red-400 font-title font-black tracking-widest">⚠️ S-RANK LIMITATION: TRIAL MODE</div>
                             <p class="text-xs text-gray-300">
@@ -1344,7 +1344,7 @@ new class extends Component {
                         >
                             ABANDON
                         </button>
-                        @if ($this->user->is_contracts_paid || $newContractDuration == 7)
+                        @if ($this->user->hasContractsAccess() || $newContractDuration == 7)
                             <button 
                                 type="submit" 
                                 class="px-6 py-2.5 bg-gradient-to-r from-neon-blue to-neon-purple text-obsidian-dark font-title font-black text-xs rounded-lg shadow-neon-blue"
