@@ -1255,7 +1255,7 @@ new class extends Component {
     <!-- AWAKEN NEW CONTRACT MODAL -->
     @if ($showContractModal)
         <div class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-            <div class="bg-obsidian-card border border-white/10 w-full max-w-lg rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl relative neon-border">
+            <div class="bg-obsidian-card border border-white/10 w-full max-w-lg rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl relative neon-border max-h-[90vh] overflow-y-auto">
                 <div class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-neon-blue/40 pointer-events-none"></div>
                 <div class="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-neon-blue/40 pointer-events-none"></div>
                 <div class="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-neon-blue/40 pointer-events-none"></div>
