@@ -388,7 +388,7 @@ new class extends Component {
         }
 
         if (!$this->user->is_contracts_paid && $this->newContractDuration != 7) {
-            session()->flash('error', 'Durations longer than 7 days require a National Rank upgrade (Rs 99).');
+            session()->flash('error', 'Durations longer than 7 days require a National Rank upgrade (Rs 1).');
             return;
         }
 
@@ -567,7 +567,7 @@ new class extends Component {
         $this->user->save();
 
         XPEngineService::award($this->user, 'achievement'); // +100 XP
-        session()->flash('success', 'TRANSACTION SUCCESSFUL: Accepted 99 Rs via UPI/Razorpay. Contracts unlocked indefinitely! +100 XP gained!');
+        session()->flash('success', 'TRANSACTION SUCCESSFUL: Accepted 1 Rs via UPI/Razorpay. Contracts unlocked indefinitely! +100 XP gained!');
         $this->loadDashboardData();
     }
 
@@ -723,14 +723,14 @@ new class extends Component {
                         </div>
                         <h4 class="font-title font-black text-red-400 mt-2 tracking-wider">SYSTEM CONTRACT LOCKED</h4>
                         <p class="text-xs text-gray-400 max-w-md mx-auto leading-relaxed">
-                            Your 7-day contract trial has expired. To continue accepting daily system contracts and ascending Hunter Ranks, pay 99 Rs via Razorpay / UPI.
+                            Your 7-day contract trial has expired. To continue accepting daily system contracts and ascending Hunter Ranks, pay 1 Rs via Razorpay / UPI.
                         </p>
                         <div class="pt-2">
                             <button 
                                 wire:click="payForContracts"
                                 class="px-8 py-3.5 bg-gradient-to-r from-neon-blue via-neon-purple to-gold-rpg text-obsidian-dark font-title font-black text-xs tracking-widest rounded-lg shadow-neon-blue hover:scale-102 hover:opacity-95 transition duration-300"
                             >
-                                UNLOCK CONTRACTS INDEFINITELY // 99 Rs
+                                UNLOCK CONTRACTS INDEFINITELY // 1 Rs
                             </button>
                         </div>
                     </div>
@@ -1316,12 +1316,12 @@ new class extends Component {
                         <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5 space-y-4 text-center">
                             <div class="text-xs text-red-400 font-title font-black tracking-widest">⚠️ S-RANK LIMITATION: TRIAL MODE</div>
                             <p class="text-xs text-gray-300">
-                                Chrono-durations longer than 7 days require a National Rank upgrade. Scan the QR code below to pay **Rs 99** and unlock this option permanently.
+                                Chrono-durations longer than 7 days require a National Rank upgrade. Scan the QR code below to pay **Rs 1** and unlock this option permanently.
                             </p>
                             
                             <!-- UPI QR Code -->
                             <div class="bg-white p-2 rounded-lg w-44 h-44 mx-auto flex items-center justify-center shadow-lg">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yspuhf@upi%26pn=SoloLeveling%26am=99%26cu=INR" alt="UPI QR Code" class="w-full h-full">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yspuhf@upi%26pn=SoloLeveling%26am=1%26cu=INR" alt="UPI QR Code" class="w-full h-full">
                             </div>
                             
                             <div class="text-[10px] text-gray-500 font-mono">UPI ID: yspuhf@upi</div>
@@ -1331,7 +1331,7 @@ new class extends Component {
                                 wire:click="payForContracts"
                                 class="w-full py-3 bg-gradient-to-r from-neon-blue to-neon-purple text-obsidian-dark font-title font-black text-xs tracking-wider rounded-lg shadow-neon-blue hover:opacity-90 transition duration-300"
                             >
-                                I HAVE SCANNED & PAID Rs 99
+                                I HAVE SCANNED & PAID Rs 1
                             </button>
                         </div>
                     @endif

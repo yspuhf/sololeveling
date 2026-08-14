@@ -161,7 +161,7 @@ class ActiveContractsTest extends TestCase
 
         // It should assert that no contract was created
         $this->assertEquals(0, $user->systemContracts()->count());
-        $component->assertSee('Durations longer than 7 days require a National Rank upgrade (Rs 99).');
+        $component->assertSee('Durations longer than 7 days require a National Rank upgrade (Rs 1).');
 
         // Upgrade to paid status
         $component->call('payForContracts');
