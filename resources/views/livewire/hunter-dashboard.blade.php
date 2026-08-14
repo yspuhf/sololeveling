@@ -18,6 +18,7 @@ new class extends Component {
     public $skills = [];
     public ?SystemContract $activeContract = null;
     public $activeContracts = [];
+    public $incompletedContracts = [];
     public $checkins = [];
     public $dailyQuests = [];
     public string $aiCoachingMessage = '';
@@ -239,6 +240,9 @@ new class extends Component {
 
         $this->activeContracts = $this->user->systemContracts()
             ->where('status', 'active')
+            ->get();
+        $this->incompletedContracts = $this->user->systemContracts()
+            ->where('status', 'failed')
             ->get();
         $this->activeContract = $this->activeContracts->first();
 
@@ -818,6 +822,54 @@ new class extends Component {
                             <p class="text-xs text-gray-600 mt-2 max-w-sm mx-auto">Awaken a contract (up to 5 active simultaneously) to structure your habits. Consistency unlocks your progression. Failure breaks your record streak.</p>
                         </div>
                     @endif
+                @endif
+            </div>
+
+            <!-- INCOMPLETED SYSTEM CONTRACTS -->
+            <div class="bg-obsidian-card border border-white/5 rounded-2xl p-6 shadow-xl space-y-6 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(239,68,68,0.01)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none"></div>
+
+                <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-title text-lg font-black text-white tracking-wide">INCOMPLETED SYSTEM CONTRACTS</h3>
+                            <p class="text-[10px] text-red-500 font-bold tracking-wider">FAILED RECURRING HABIT STRATEGIES // {{ count($incompletedContracts) }} INCOMPLETED</p>
+                        </div>
+                    </div>
+                </div>
+
+                @if (count($incompletedContracts) > 0)
+                    <div class="space-y-4">
+                        @foreach ($incompletedContracts as $contract)
+                            <div class="bg-black/45 border border-red-500/10 rounded-xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div>
+                                    <span class="text-[10px] text-red-400 font-title font-bold tracking-widest block uppercase">FAILED CONTRACT</span>
+                                    <div class="text-white font-bold text-sm mt-0.5">{{ $contract->title }}</div>
+                                </div>
+                                <div class="flex items-center gap-6">
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 font-title font-bold tracking-widest block uppercase">DURATION</span>
+                                        <div class="text-gray-300 text-xs font-semibold mt-0.5">{{ $contract->duration_days }} Days</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 font-title font-bold tracking-widest block uppercase">FAILED DATE</span>
+                                        <div class="text-red-400 font-title font-bold text-xs mt-0.5">
+                                            {{ $contract->failed_at ? Carbon::parse($contract->failed_at)->format('d M Y') : 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 bg-black/20 border border-dashed border-white/5 rounded-xl">
+                        <span class="text-2xl">🏆</span>
+                        <h4 class="font-title font-bold text-gray-500 mt-2 text-xs tracking-wider">NO INCOMPLETED CONTRACTS</h4>
+                        <p class="text-[10px] text-gray-600 mt-1 max-w-sm mx-auto">Your record is spotless. Keep executing your checks to maintain your perfect streak!</p>
+                    </div>
                 @endif
             </div>
 
