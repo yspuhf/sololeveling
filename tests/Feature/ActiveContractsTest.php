@@ -144,4 +144,39 @@ class ActiveContractsTest extends TestCase
         $component->assertSee("has failed due to missed check-in on Day 2! Streaks reset to 0.");
         Event::assertDispatched(ContractBroken::class);
     }
+
+    public function test_trial_user_cannot_create_non_seven_day_contract_unless_paid()
+    {
+        $user = User::factory()->create([
+            'is_contracts_paid' => false,
+        ]);
+        $this->actingAs($user);
+
+        // Attempt to create a 21-day contract as a trial user
+        $component = Volt::test('hunter-dashboard')
+            ->set('newContractTitle', 'Trial 21 Day Contract')
+            ->set('newContractDuration', 21)
+            ->set('newContractDifficulty', 'Easy')
+            ->call('acceptContract');
+
+        // It should assert that no contract was created
+        $this->assertEquals(0, $user->systemContracts()->count());
+        $component->assertSee('Durations longer than 7 days require a National Rank upgrade (Rs 99).');
+
+        // Upgrade to paid status
+        $component->call('payForContracts');
+        $user->refresh();
+        $this->assertTrue((bool)$user->is_contracts_paid);
+
+        // Attempt to create the 21-day contract again
+        $component->set('newContractTitle', 'Paid 21 Day Contract')
+            ->set('newContractDuration', 21)
+            ->set('newContractDifficulty', 'Easy')
+            ->call('acceptContract');
+
+        // It should successfully create the contract
+        $this->assertEquals(1, $user->systemContracts()->count());
+        $contract = $user->systemContracts()->first();
+        $this->assertEquals(21, $contract->duration_days);
+    }
 }

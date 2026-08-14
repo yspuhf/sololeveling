@@ -387,6 +387,11 @@ new class extends Component {
             return;
         }
 
+        if (!$this->user->is_contracts_paid && $this->newContractDuration != 7) {
+            session()->flash('error', 'Durations longer than 7 days require a National Rank upgrade (Rs 99).');
+            return;
+        }
+
         $activeCount = $this->user->systemContracts()->where('status', 'active')->count();
         if ($activeCount >= 5) {
             session()->flash('error', 'You have reached the maximum limit of 5 active system contracts.');
@@ -1294,17 +1299,44 @@ new class extends Component {
                         </div>
                     </div>
 
-                    <div class="bg-black/60 rounded-xl p-4 border border-white/5 space-y-1">
-                        <div class="text-xs text-slate-400 font-title font-black tracking-widest">SYSTEM REWARD PROJECTION:</div>
-                        <div class="text-neon-blue font-title font-bold text-xs">
-                            XP: +{{ intval($newContractDuration) * 20 * ['Easy'=>1,'Medium'=>2,'Hard'=>3,'Elite'=>5][$newContractDifficulty] }} XP
+                    <!-- Reward Projection -->
+                    @if ($this->user->is_contracts_paid || $newContractDuration == 7)
+                        <div class="bg-black/60 rounded-xl p-4 border border-white/5 space-y-1">
+                            <div class="text-xs text-slate-400 font-title font-black tracking-widest">SYSTEM REWARD PROJECTION:</div>
+                            <div class="text-neon-blue font-title font-bold text-xs">
+                                XP: +{{ intval($newContractDuration) * 20 * ['Easy'=>1,'Medium'=>2,'Hard'=>3,'Elite'=>5][$newContractDifficulty] }} XP
+                            </div>
+                            <div class="text-gold-rpg font-title font-bold text-xs">
+                                GOLD: +{{ intval($newContractDuration) * 20 * ['Easy'=>1,'Medium'=>2,'Hard'=>3,'Elite'=>5][$newContractDifficulty] * 2 }} GOLD
+                            </div>
                         </div>
-                        <div class="text-gold-rpg font-title font-bold text-xs">
-                            GOLD: +{{ intval($newContractDuration) * 20 * ['Easy'=>1,'Medium'=>2,'Hard'=>3,'Elite'=>5][$newContractDifficulty] * 2 }} GOLD
-                        </div>
-                    </div>
+                    @endif
 
-                    <div class="flex justify-end gap-3 pt-4">
+                    @if (!$this->user->is_contracts_paid && $newContractDuration != 7)
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5 space-y-4 text-center">
+                            <div class="text-xs text-red-400 font-title font-black tracking-widest">⚠️ S-RANK LIMITATION: TRIAL MODE</div>
+                            <p class="text-xs text-gray-300">
+                                Chrono-durations longer than 7 days require a National Rank upgrade. Scan the QR code below to pay **Rs 99** and unlock this option permanently.
+                            </p>
+                            
+                            <!-- UPI QR Code -->
+                            <div class="bg-white p-2 rounded-lg w-44 h-44 mx-auto flex items-center justify-center shadow-lg">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yspuhf@upi%26pn=SoloLeveling%26am=99%26cu=INR" alt="UPI QR Code" class="w-full h-full">
+                            </div>
+                            
+                            <div class="text-[10px] text-gray-500 font-mono">UPI ID: yspuhf@upi</div>
+                            
+                            <button 
+                                type="button"
+                                wire:click="payForContracts"
+                                class="w-full py-3 bg-gradient-to-r from-neon-blue to-neon-purple text-obsidian-dark font-title font-black text-xs tracking-wider rounded-lg shadow-neon-blue hover:opacity-90 transition duration-300"
+                            >
+                                I HAVE SCANNED & PAID Rs 99
+                            </button>
+                        </div>
+                    @endif
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-white/5">
                         <button 
                             type="button" 
                             wire:click="$set('showContractModal', false)"
@@ -1312,12 +1344,14 @@ new class extends Component {
                         >
                             ABANDON
                         </button>
-                        <button 
-                            type="submit" 
-                            class="px-6 py-2.5 bg-gradient-to-r from-neon-blue to-neon-purple text-obsidian-dark font-title font-black text-xs rounded-lg shadow-neon-blue"
-                        >
-                            AWAKEN CONTRACT
-                        </button>
+                        @if ($this->user->is_contracts_paid || $newContractDuration == 7)
+                            <button 
+                                type="submit" 
+                                class="px-6 py-2.5 bg-gradient-to-r from-neon-blue to-neon-purple text-obsidian-dark font-title font-black text-xs rounded-lg shadow-neon-blue"
+                            >
+                                AWAKEN CONTRACT
+                            </button>
+                        @endif
                     </div>
                 </form>
             </div>
