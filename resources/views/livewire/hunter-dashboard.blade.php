@@ -1320,11 +1320,11 @@ new class extends Component {
                             </p>
                             
                             <!-- UPI QR Code -->
-                            <div class="bg-white p-2 rounded-lg w-44 h-44 mx-auto flex items-center justify-center shadow-lg">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yspuhf@upi%26pn=SoloLeveling%26am=1%26cu=INR" alt="UPI QR Code" class="w-full h-full">
+                            <div class="bg-white p-2 rounded-lg w-48 h-auto mx-auto flex items-center justify-center shadow-lg">
+                                <img src="{{ asset('images/pay_qr.jpg') }}" alt="UPI QR Code" class="w-full h-auto rounded-md">
                             </div>
                             
-                            <div class="text-[10px] text-gray-500 font-mono">UPI ID: yspuhf@upi</div>
+                            <div class="text-[10px] text-gray-500 font-mono">UPI ID: rekhathakuruhf-2@okhdfcbank</div>
                             
                             <button 
                                 type="button"
