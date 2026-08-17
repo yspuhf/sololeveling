@@ -184,11 +184,11 @@ new class extends Component {
                             <td class="p-4">
                                 @php $rank = $user->determineRank(); @endphp
                                 <span class="px-2.5 py-1 rounded-md text-[10px] font-title font-black tracking-widest uppercase
-                                    @if(in_array($rank, ['S', 'National'])) bg-gold-rpg/10 text-gold-rpg border border-gold-rpg/20
-                                    @elseif($rank === 'A') bg-neon-purple/10 text-neon-purple border border-neon-purple/20
-                                    @elseif($rank === 'B') bg-neon-blue/10 text-neon-blue border border-neon-blue/20
+                                    @if(in_array($rank, ['S-Rank', 'National Rank', 'Monarch Rank'])) bg-gold-rpg/10 text-gold-rpg border border-gold-rpg/20
+                                    @elseif($rank === 'A-Rank') bg-neon-purple/10 text-neon-purple border border-neon-purple/20
+                                    @elseif($rank === 'B-Rank') bg-neon-blue/10 text-neon-blue border border-neon-blue/20
                                     @else bg-slate-500/10 text-slate-400 border border-slate-500/20 @endif">
-                                    {{ $rank }}-Rank
+                                    {{ $rank }}
                                 </span>
                             </td>
                             <td class="p-4">

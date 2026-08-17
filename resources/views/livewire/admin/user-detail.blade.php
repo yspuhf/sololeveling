@@ -185,7 +185,7 @@ new class extends Component {
                     <div class="pt-2">
                         @php $rank = $user->determineRank(); @endphp
                         <span class="px-3 py-1 rounded-md text-[10px] font-title font-black tracking-widest uppercase bg-neon-purple/10 text-neon-purple border border-neon-purple/20">
-                            {{ $rank }}-Rank Hunter
+                            {{ $rank }} Hunter
                         </span>
                     </div>
                 </div>

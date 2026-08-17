@@ -151,8 +151,9 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
-    public function determineRank(int $level): string
+    public function determineRank(?int $level = null): string
     {
+        $level = $level ?? $this->level ?? 1;
         if ($level <= 10) return 'E-Rank';
         if ($level <= 20) return 'D-Rank';
         if ($level <= 35) return 'C-Rank';
