@@ -129,3 +129,10 @@ public/build/assets/app-DMRtMKZ6.js   45.65 kB │ gzip: 17.72 kB
 - **Real-Time Recalculation**: Sub-stat metric updates are dynamically summed (capped at 100 per domain) and the cumulative average recalculates the user's Overall Hunter Level & Hunter Rank (E-Rank to S-Rank).
 - **Sub-stat Detail Visualizer**: In display mode, the dashboard scorecard cards display a clean, dynamic list of active target habits and their individual scores underneath the main category bar (showing up to 5 habits with a indicator for additional habits).
 - **Asset Re-compilation & Verification**: Recompiled asset packages and ran all PHPUnit feature and unit tests, achieving a 100% pass rate.
+
+---
+
+## 9. Admin Panel Dashboard and Layout Fixes
+- **Resolved ArgumentCountError**: Fixed a crash on the `/admin/users` and `/admin/users/{id}` routes by making the `$level` parameter optional in the `determineRank()` function within the `User` model, defaulting to the user's current level.
+- **Fixed Rank Styling and Duplicate Labels**: Corrected double-ranking suffixes (`E-Rank-Rank` -> `E-Rank`) and properly formatted the CSS badges according to full rank names (`S-Rank`, `A-Rank`, `B-Rank`, etc.).
+- **Codebase Integration**: Committed and pushed all layout fixes successfully to the GitHub repository.
