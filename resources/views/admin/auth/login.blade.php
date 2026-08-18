@@ -28,22 +28,22 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-white/20 bg-black/40 text-neon-purple focus:ring-0 focus:ring-offset-0" name="remember">
-                    <span class="ms-2 text-xs text-slate-400 font-title font-bold tracking-wider">{{ __('KEEP SESSION ACTIVE') }}</span>
+            <!-- Remember Me & User Access -->
+            <div class="flex items-center justify-between mt-4">
+                <label for="remember_me" class="inline-flex items-center cursor-pointer">
+                    <input id="remember_me" type="checkbox" class="rounded border-white/20 bg-black/40 text-neon-purple focus:ring-0 focus:ring-offset-0 w-4.5 h-4.5" name="remember">
+                    <span class="ms-2 text-xs text-slate-400 font-title font-bold tracking-wider hover:text-slate-300 transition duration-300">{{ __('KEEP SESSION ACTIVE') }}</span>
                 </label>
-            </div>
 
-            <div class="flex items-center justify-end mt-6 pt-4 border-t border-white/5">
                 <a class="underline text-xs text-slate-400 font-title font-bold tracking-wider hover:text-white transition duration-300" href="{{ route('login') }}">
                     {{ __('USER ACCESS') }}
                 </a>
+            </div>
 
-                <x-primary-button class="ms-4 bg-gradient-to-r from-neon-purple to-pink-500 border-none shadow-neon-purple/20">
+            <div class="pt-4 border-t border-white/5 mt-6">
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-neon-purple to-pink-500 text-obsidian-dark font-title font-black text-xs tracking-widest rounded-lg shadow-neon-purple hover:scale-[1.02] hover:opacity-95 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-neon-purple/50 transition duration-300 uppercase">
                     {{ __('AWAKEN ACCESS') }}
-                </x-primary-button>
+                </button>
             </div>
         </form>
     </div>
