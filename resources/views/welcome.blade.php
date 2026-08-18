@@ -148,7 +148,7 @@
 
         <div class="relative z-10 min-h-screen flex flex-col justify-between">
             <!-- Transparent Header/Navbar -->
-            <header class="border-b border-white/5 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
+            <header x-data="{ mobileMenuOpen: false }" class="border-b border-white/5 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded bg-gradient-to-br from-neon-blue via-neon-purple to-gold-rpg flex items-center justify-center font-bold text-obsidian-dark font-title text-xl tracking-wider shadow-neon-blue">
@@ -181,17 +181,65 @@
                             </svg>
                         </button>
 
+                        <div class="hidden md:flex items-center gap-4">
+                            @if (Route::has('login'))
+                                @auth
+                                    <a href="{{ url('/dashboard') }}" class="font-title px-6 py-2.5 rounded bg-transparent border border-neon-blue text-neon-blue hover:bg-neon-blue/10 transition text-xs tracking-widest font-black shadow-neon-blue glow-btn">
+                                        ENTER SYSTEM
+                                    </a>
+                                @else
+                                    <a href="{{ route('login') }}" class="font-title text-xs tracking-widest font-bold text-gray-400 hover:text-white transition">
+                                        LOGIN
+                                    </a>
+                                    @if (Route::has('register'))
+                                        <a href="{{ route('register') }}" class="font-title px-6 py-3 rounded bg-gradient-to-r from-neon-blue via-neon-purple to-gold-rpg text-obsidian-dark font-black text-xs tracking-widest hover:scale-105 transition duration-300 shadow-neon-blue glow-btn">
+                                            AWAKEN NOW
+                                        </a>
+                                    @endif
+                                @endauth
+                            @endif
+                        </div>
+
+                        <!-- Mobile hamburger toggler -->
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2.5 rounded-lg border border-white/10 text-slate-400 hover:text-white hover:border-neon-blue/35 block md:hidden bg-black/20 focus:outline-none transition duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" style="display: none;" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Responsive Mobile Menu Dropdown -->
+                <div x-show="mobileMenuOpen" 
+                     x-transition:enter="transition ease-out duration-200" 
+                     x-transition:enter-start="opacity-0 -translate-y-4" 
+                     x-transition:enter-end="opacity-100 translate-y-0" 
+                     x-transition:leave="transition ease-in duration-150" 
+                     x-transition:leave-start="opacity-100 translate-y-0" 
+                     x-transition:leave-end="opacity-0 -translate-y-4" 
+                     class="md:hidden border-t border-white/5 bg-obsidian-card px-6 py-4 space-y-4 shadow-2xl relative z-40"
+                     style="display: none;"
+                >
+                    <nav class="flex flex-col gap-4 font-title text-xs tracking-widest font-bold text-slate-400">
+                        <a href="#evolution" @click="mobileMenuOpen = false" class="hover:text-neon-blue transition duration-300">SYSTEM PROGRESSION</a>
+                        <a href="#skills" @click="mobileMenuOpen = false" class="hover:text-neon-blue transition duration-300">ELITE SKILLS</a>
+                        <a href="#leaderboard" @click="mobileMenuOpen = false" class="hover:text-neon-blue transition duration-300">LEADERBOARD</a>
+                        <a href="#shadow-guide" @click="mobileMenuOpen = false" class="hover:text-neon-blue transition duration-300">SHADOW COACH</a>
+                    </nav>
+                    <hr class="border-white/5">
+                    <div class="flex flex-col gap-3">
                         @if (Route::has('login'))
                             @auth
-                                <a href="{{ url('/dashboard') }}" class="font-title px-6 py-2.5 rounded bg-transparent border border-neon-blue text-neon-blue hover:bg-neon-blue/10 transition text-xs tracking-widest font-black shadow-neon-blue glow-btn">
+                                <a href="{{ url('/dashboard') }}" @click="mobileMenuOpen = false" class="font-title px-6 py-3 rounded bg-transparent border border-neon-blue text-neon-blue text-center text-xs tracking-widest font-black shadow-neon-blue glow-btn">
                                     ENTER SYSTEM
                                 </a>
                             @else
-                                <a href="{{ route('login') }}" class="font-title text-xs tracking-widest font-bold text-gray-400 hover:text-white transition">
+                                <a href="{{ route('login') }}" @click="mobileMenuOpen = false" class="font-title text-xs tracking-widest font-bold text-center text-gray-400 hover:text-white transition py-2">
                                     LOGIN
                                 </a>
                                 @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="font-title px-6 py-3 rounded bg-gradient-to-r from-neon-blue via-neon-purple to-gold-rpg text-obsidian-dark font-black text-xs tracking-widest hover:scale-105 transition duration-300 shadow-neon-blue glow-btn">
+                                    <a href="{{ route('register') }}" @click="mobileMenuOpen = false" class="font-title px-6 py-3 rounded bg-gradient-to-r from-neon-blue via-neon-purple to-gold-rpg text-obsidian-dark text-center font-black text-xs tracking-widest hover:opacity-95 transition shadow-neon-blue glow-btn">
                                         AWAKEN NOW
                                     </a>
                                 @endif
@@ -564,58 +612,60 @@
                                 </p>
 
                                 <div class="bg-obsidian-card border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-                                    <table class="w-full text-left border-collapse">
-                                        <thead>
-                                            <tr class="border-b border-white/5 bg-black/40 font-title text-[10px] tracking-widest text-gray-500">
-                                                <th class="py-4 px-6">RANK</th>
-                                                <th class="py-4 px-6">HUNTER NAME</th>
-                                                <th class="py-4 px-6">LEVEL</th>
-                                                <th class="py-4 px-6">GUILD</th>
-                                                <th class="py-4 px-6 text-right">STREAK</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-white/5 text-sm font-light">
-                                            <tr class="hover:bg-white/5 transition duration-300">
-                                                <td class="py-4 px-6 font-title font-black text-gold-rpg">#01</td>
-                                                <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
-                                                    <img src="{{ asset('images/sung_jin_woo.png') }}" class="w-9 h-9 rounded-full border border-neon-blue/40 object-cover shrink-0">
-                                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
-                                                        <span>Sung Jin-Woo</span>
-                                                        <span class="text-[9px] text-neon-blue font-title font-black border border-neon-blue/20 bg-neon-blue/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">Monarch</span>
-                                                    </div>
-                                                </td>
-                                                <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 142</td>
-                                                <td class="py-4 px-6 text-gray-400">Ahjin</td>
-                                                <td class="py-4 px-6 text-right text-gold-rpg font-title font-bold">120 Days</td>
-                                            </tr>
-                                            <tr class="hover:bg-white/5 transition duration-300">
-                                                <td class="py-4 px-6 font-title font-black text-gray-400">#02</td>
-                                                <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
-                                                    <img src="{{ asset('images/cha_hae_in.png') }}" class="w-9 h-9 rounded-full border border-neon-purple/40 object-cover shrink-0">
-                                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
-                                                        <span>Cha Hae-In</span>
-                                                        <span class="text-[9px] text-neon-purple font-title font-black border border-neon-purple/20 bg-neon-purple/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">S-Rank</span>
-                                                    </div>
-                                                </td>
-                                                <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 94</td>
-                                                <td class="py-4 px-6 text-gray-400">Hunters</td>
-                                                <td class="py-4 px-6 text-right text-neon-blue font-title font-bold">81 Days</td>
-                                            </tr>
-                                            <tr class="hover:bg-white/5 transition duration-300">
-                                                <td class="py-4 px-6 font-title font-black text-amber-700">#03</td>
-                                                <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
-                                                    <img src="{{ asset('images/thomas_andre.png') }}" class="w-9 h-9 rounded-full border border-gold-rpg/40 object-cover shrink-0">
-                                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
-                                                        <span>Thomas Andre</span>
-                                                        <span class="text-[9px] text-gold-rpg font-title font-black border border-gold-rpg/20 bg-gold-rpg/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">National</span>
-                                                    </div>
-                                                </td>
-                                                <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 91</td>
-                                                <td class="py-4 px-6 text-gray-400">Scavenger</td>
-                                                <td class="py-4 px-6 text-right text-neon-blue font-title font-bold">54 Days</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="overflow-x-auto w-full">
+                                        <table class="w-full text-left border-collapse min-w-[600px]">
+                                            <thead>
+                                                <tr class="border-b border-white/5 bg-black/40 font-title text-[10px] tracking-widest text-gray-500">
+                                                    <th class="py-4 px-6">RANK</th>
+                                                    <th class="py-4 px-6">HUNTER NAME</th>
+                                                    <th class="py-4 px-6">LEVEL</th>
+                                                    <th class="py-4 px-6">GUILD</th>
+                                                    <th class="py-4 px-6 text-right">STREAK</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-white/5 text-sm font-light">
+                                                <tr class="hover:bg-white/5 transition duration-300">
+                                                    <td class="py-4 px-6 font-title font-black text-gold-rpg">#01</td>
+                                                    <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
+                                                        <img src="{{ asset('images/sung_jin_woo.png') }}" class="w-9 h-9 rounded-full border border-neon-blue/40 object-cover shrink-0">
+                                                        <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
+                                                            <span>Sung Jin-Woo</span>
+                                                            <span class="text-[9px] text-neon-blue font-title font-black border border-neon-blue/20 bg-neon-blue/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">Monarch</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 142</td>
+                                                    <td class="py-4 px-6 text-gray-400">Ahjin</td>
+                                                    <td class="py-4 px-6 text-right text-gold-rpg font-title font-bold">120 Days</td>
+                                                </tr>
+                                                <tr class="hover:bg-white/5 transition duration-300">
+                                                    <td class="py-4 px-6 font-title font-black text-gray-400">#02</td>
+                                                    <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
+                                                        <img src="{{ asset('images/cha_hae_in.png') }}" class="w-9 h-9 rounded-full border border-neon-purple/40 object-cover shrink-0">
+                                                        <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
+                                                            <span>Cha Hae-In</span>
+                                                            <span class="text-[9px] text-neon-purple font-title font-black border border-neon-purple/20 bg-neon-purple/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">S-Rank</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 94</td>
+                                                    <td class="py-4 px-6 text-gray-400">Hunters</td>
+                                                    <td class="py-4 px-6 text-right text-neon-blue font-title font-bold">81 Days</td>
+                                                </tr>
+                                                <tr class="hover:bg-white/5 transition duration-300">
+                                                    <td class="py-4 px-6 font-title font-black text-amber-700">#03</td>
+                                                    <td class="py-4 px-6 font-bold text-white flex items-center gap-3">
+                                                        <img src="{{ asset('images/thomas_andre.png') }}" class="w-9 h-9 rounded-full border border-gold-rpg/40 object-cover shrink-0">
+                                                        <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
+                                                            <span>Thomas Andre</span>
+                                                            <span class="text-[9px] text-gold-rpg font-title font-black border border-gold-rpg/20 bg-gold-rpg/10 px-1.5 py-0.5 rounded uppercase tracking-wider w-max">National</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-4 px-6 font-title text-neon-purple font-black">Lv. 91</td>
+                                                    <td class="py-4 px-6 text-gray-400">Scavenger</td>
+                                                    <td class="py-4 px-6 text-right text-neon-blue font-title font-bold">54 Days</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-8 text-center lg:text-left">

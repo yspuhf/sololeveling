@@ -52,7 +52,7 @@ new class extends Component {
     <!-- Table -->
     <div class="bg-obsidian-card border border-white/5 rounded-2xl overflow-hidden shadow-lg">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border-collapse">
+            <table class="w-full text-left text-xs border-collapse min-w-[700px]">
                 <thead>
                     <tr class="bg-black/20 border-b border-white/5 font-title font-bold text-slate-400 tracking-wider">
                         <th class="p-4">ID</th>

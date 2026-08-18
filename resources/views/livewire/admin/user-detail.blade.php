@@ -338,7 +338,7 @@ new class extends Component {
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
+                    <table class="w-full text-left text-xs border-collapse min-w-[700px]">
                         <thead>
                             <tr class="bg-black/20 border-b border-white/5 font-title font-bold text-slate-400 tracking-wider">
                                 <th class="p-3">DATE</th>

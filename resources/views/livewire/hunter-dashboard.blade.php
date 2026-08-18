@@ -641,9 +641,9 @@ new class extends Component {
                         </defs>
                     </svg>
                     <!-- Center Rank Text -->
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-[10px] font-title font-black tracking-widest text-slate-400">RANK</span>
-                        <span class="font-title font-black text-lg text-white leading-none tracking-tighter">{{ $user->rank }}</span>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-1">
+                        <span class="text-[9px] font-title font-black tracking-widest text-slate-400">RANK</span>
+                        <span class="font-title font-black text-white leading-none tracking-tighter {{ strlen($user->rank) > 8 ? 'text-[9px]' : 'text-lg' }}">{{ $user->rank }}</span>
                     </div>
                 </div>
 
@@ -662,7 +662,7 @@ new class extends Component {
             </div>
 
             <!-- Streaks Diagnostic indicators -->
-            <div class="flex gap-6 border-l border-white/5 pl-6 md:border-l-0 md:pl-0">
+            <div class="flex gap-6 md:border-l border-white/5 md:pl-6 border-l-0 pl-0">
                 <div>
                     <div class="text-slate-400 text-xs font-title tracking-widest font-bold">CURRENT STREAK</div>
                     <div class="text-neon-blue font-title font-black text-2xl">{{ $user->current_streak }} DAYS</div>

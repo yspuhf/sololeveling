@@ -39,10 +39,25 @@
         </style>
     </head>
     <body class="font-sans antialiased bg-obsidian-dark text-gray-300">
-        <div class="min-h-screen flex flex-col md:flex-row">
+        <div x-data="{ sidebarOpen: false }" class="min-h-screen flex flex-col md:flex-row relative">
             
+            <!-- Mobile Sidebar Backdrop Overlay -->
+            <div x-show="sidebarOpen" 
+                 x-transition:enter="transition-opacity ease-linear duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity ease-linear duration-300"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="sidebarOpen = false" 
+                 class="fixed inset-0 bg-black/70 z-20 md:hidden" 
+                 style="display: none;"></div>
+
             <!-- Sidebar -->
-            <aside class="w-full md:w-64 bg-obsidian-card border-r border-white/5 flex flex-col justify-between z-20 shrink-0">
+            <aside 
+                :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
+                class="fixed inset-y-0 left-0 w-64 h-full bg-obsidian-card border-r border-white/5 flex flex-col justify-between z-30 shrink-0 transform md:translate-x-0 md:static md:h-screen transition-transform duration-300 ease-in-out"
+            >
                 <div>
                     <!-- Logo / Association title -->
                     <div class="p-6 border-b border-white/5 flex items-center justify-between">
@@ -53,10 +68,16 @@
                             </h1>
                             <p class="text-[9px] text-neon-purple font-mono font-bold tracking-wider">MANAGEMENT_CONSOLE_v1.0</p>
                         </div>
+                        <!-- Sidebar mobile close button -->
+                        <button @click="sidebarOpen = false" class="p-1 rounded-lg border border-white/10 text-slate-400 hover:text-white md:hidden hover:border-neon-purple/30 bg-black/20 focus:outline-none transition duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- Sidebar navigation menu -->
-                    <nav class="p-4 space-y-1.5">
+                    <nav class="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-14rem)]">
                         <a href="{{ route('admin.dashboard') }}" 
                            class="flex items-center gap-3 px-4 py-3 rounded-xl font-title text-xs font-bold tracking-wider transition-all duration-300 {{ request()->routeIs('admin.dashboard') ? 'bg-neon-purple/10 border border-neon-purple/20 text-white shadow-neon-purple/5' : 'text-slate-400 hover:text-white border border-transparent' }}">
                             📊 DASHBOARD
@@ -110,21 +131,27 @@
             </aside>
 
             <!-- Main Content Container -->
-            <div class="flex-1 flex flex-col min-w-0">
+            <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
                 <!-- Top Nav Bar -->
                 <header class="h-16 bg-obsidian-card/85 backdrop-blur border-b border-white/5 flex items-center justify-between px-6 z-10 sticky top-0">
                     <div class="flex items-center gap-4">
+                        <!-- Hamburger toggler for sidebar -->
+                        <button @click="sidebarOpen = !sidebarOpen" class="p-2 -ml-2 rounded-lg border border-white/10 text-slate-400 hover:text-white md:hidden hover:border-neon-purple/30 bg-black/20 focus:outline-none transition duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
                         <h2 class="text-white font-title text-sm font-black tracking-widest uppercase">
                             @yield('page_title', 'ARISE CONSOLE')
                         </h2>
                     </div>
-                    <div class="flex items-center gap-4 text-xs font-mono font-bold text-slate-400">
-                        <span>SYSTEM_STATUS: <span class="text-green-400">ONLINE</span></span>
+                    <div class="flex items-center gap-4 text-[10px] sm:text-xs font-mono font-bold text-slate-400">
+                        <span>STATUS: <span class="text-green-400">ONLINE</span></span>
                     </div>
                 </header>
 
                 <!-- Page Content Body -->
-                <main class="flex-1 p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-4rem)]">
+                <main class="flex-1 p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-4rem)] bg-obsidian-dark">
                     {{ $slot }}
                 </main>
             </div>
