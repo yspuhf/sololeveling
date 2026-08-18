@@ -164,6 +164,58 @@ if (isset($_GET['migrate']) && ($_GET['migrate'] === 'true' || $_GET['migrate'] 
     echo "Skipping migrations (add &migrate=true to run)\n\n";
 }
 
+// Step 5: Reset Admin Credentials if requested
+if (isset($_GET['reset_admin']) && ($_GET['reset_admin'] === 'true' || $_GET['reset_admin'] === '1')) {
+    echo "<span class='info'>[INFO] Booting Laravel to reset admin credentials...</span>\n";
+    $autoload_path = $project_root . '/vendor/autoload.php';
+    $app_path = $project_root . '/bootstrap/app.php';
+    
+    if (file_exists($autoload_path) && file_exists($app_path)) {
+        try {
+            require_once $autoload_path;
+            $app = require_once $app_path;
+            $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+            $kernel->bootstrap();
+            
+            $role = \App\Models\Role::firstOrCreate(['name' => 'super_admin']);
+            
+            // Try to find by email or role
+            $admin = \App\Models\User::where('email', 'admin@example.com')->first();
+            if (!$admin) {
+                $admin = \App\Models\User::whereHas('roles', function($q) {
+                    $q->where('name', 'super_admin');
+                })->first();
+            }
+            
+            if (!$admin) {
+                $admin = \App\Models\User::create([
+                    'name' => 'System Admin',
+                    'email' => 'admin@example.com',
+                    'password' => \Illuminate\Support\Facades\Hash::make('Welcome@123'),
+                    'status' => 'active',
+                    'email_verified_at' => now(),
+                ]);
+                $admin->roles()->attach($role->id);
+                echo "<span class='success'>[SUCCESS] Admin user created: admin@example.com / Welcome@123</span>\n";
+            } else {
+                $admin->password = \Illuminate\Support\Facades\Hash::make('Welcome@123');
+                // Ensure they have the role
+                if (!$admin->roles()->where('name', 'super_admin')->exists()) {
+                    $admin->roles()->attach($role->id);
+                }
+                $admin->save();
+                echo "<span class='success'>[SUCCESS] Admin password reset for email: " . htmlspecialchars($admin->email) . " to Welcome@123</span>\n";
+            }
+        } catch (\Exception $e) {
+            echo "<span class='error'>[ERROR] Failed to reset admin credentials: " . htmlspecialchars($e->getMessage()) . "</span>\n";
+        }
+    } else {
+        echo "<span class='error'>[ERROR] Files missing.</span>\n";
+    }
+} else {
+    echo "Skipping admin reset (add &reset_admin=true to run)\n\n";
+}
+
 echo "<span class='success'><h3>Evolution Complete! System Online.</h3></span>";
 echo "</pre>
 </body>
